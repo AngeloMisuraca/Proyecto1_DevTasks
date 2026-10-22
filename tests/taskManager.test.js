@@ -3,6 +3,7 @@ import {
   createTask,
   isValidTask,
   filterTasks,
+  clearCompletedTasks,
   getTaskStats
 } from "../js/taskManager.js";
 
@@ -85,5 +86,30 @@ describe("getTaskStats", () => {
       pending: 0,
       completed: 0
     });
+  });
+});
+
+describe("clearCompletedTasks", () => {
+  it("retorna una nova llista sense tasques completades", () => {
+    const tasks = [
+      { id: 1, text: "Tasca pendent", completed: false },
+      { id: 2, text: "Tasca completada", completed: true },
+      { id: 3, text: "Una altra pendent", completed: false }
+    ];
+
+    const result = clearCompletedTasks(tasks);
+
+    expect(result).toEqual([
+      { id: 1, text: "Tasca pendent", completed: false },
+      { id: 3, text: "Una altra pendent", completed: false }
+    ]);
+    expect(result).not.toBe(tasks);
+    expect(tasks).toHaveLength(3);
+  });
+
+  it("retorna una llista buida quan totes les tasques estan completades", () => {
+    const tasks = [{ id: 1, text: "Tasca completada", completed: true }];
+
+    expect(clearCompletedTasks(tasks)).toEqual([]);
   });
 });
